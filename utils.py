@@ -46,16 +46,10 @@ def createTextons(F, file_list, K):
 
 def computeHistogram(img_file, F, textons):
     """
-
+    Compute the Bag of Words (BoW) histogram of an image.
 
     :param img_file: Filename of an image
     :param F: Filter bank
-    :param textons: Textons
+    :param textons: The matrix of texton vectors
     :return: It returns a K dimension vector for the BoW representation of an image
     """
-    
-    ### YOUR CODE HERE
-
-    ### END YOUR CODE
-    
-
