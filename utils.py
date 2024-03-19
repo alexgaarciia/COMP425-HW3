@@ -37,10 +37,9 @@ def createTextons(F, file_list, K):
     # Reshape responses to a 2D array where each row is a response vector
     responses = np.array(responses).reshape(-1, F.shape[2])
 
-    # Use MiniBatchKMeans for clustering
+    # Use KMeans for clustering
     kmeans = sklearn.cluster.KMeans(n_clusters=K)
     kmeans.fit(responses)
-
     textons = kmeans.cluster_centers_
     return textons
 
