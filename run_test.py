@@ -22,9 +22,9 @@ for i in range(N_img):
 hist_test = np.empty([N_img, K])
 for i in range(N_img):
     h = computeHistogram(test_list[i], F, textons)
-    hist_test[i,:] = h
+    hist_test[i, :] = h
 
 D = cdist(hist_test, hist_train)
-pred = np.argmin(D, axis = 1)
+pred = np.argmin(D, axis=1)
 for i in range(N_img):
     print('For test%d.jpg, the closest training image is train%d.jpg' % (i+1, pred[i]+1))
