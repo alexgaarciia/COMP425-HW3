@@ -29,22 +29,28 @@ def createTextons(F, file_list, K):
         if img.ndim == 3:
             img = rgb2gray(img)
 
+        # Array to store the filter responses for this image
+        img_responses = np.zeros((img.shape[0], img.shape[1], F.shape[2]))
+
         # Apply the 48 filters in the filter bank and collect all 48-dimensional vectors of all pixels from
         # all training images
         for i in range(F.shape[2]):
             # Apply the i-th filter to the image. The "correlate" function convolves the filter with the image.
             # In addition, "mode="reflect"" specifies the behavior at the image borders (reflecting the image)
-            filtered_img = correlate(img, F[:, :, i], mode="reflect")
+            img_responses[:, :, i] = correlate(img, F[:, :, i], mode="reflect")
 
-            # As indicated in the instructions, randomly sample 100 pixel values from the filtered image to create
-            # a more manageable dataset
-            sampled_pixels = np.random.choice(filtered_img.flatten(), 100, replace=False)
+        # Reshape the responses so that each row is a 48-dimensional feature vector for a pixel
+        all_responses = img_responses.reshape(-1, F.shape[2])
 
-            # Append the sampled pixel values to the "responses" list
-            responses.append(sampled_pixels)
+        # As indicated in the instructions, randomly sample 100 pixel values from the filtered image to create
+        # a more manageable dataset
+        sampled_responses = all_responses[np.random.choice(all_responses.shape[0], 100, replace=False), :]
 
-    # Reshape responses to a 2D array where each row is a response vector
-    responses = np.array(responses).reshape(-1, F.shape[2])
+        # Append the sampled pixel values to the "responses" list
+        responses.extend(sampled_responses)
+
+    # Convert the list of responses into a numpy array for clustering
+    responses = np.array(responses)
 
     # Use KMeans for clustering
     kmeans = sklearn.cluster.KMeans(n_clusters=K, n_init=10, max_iter=300, tol=1e-4)
